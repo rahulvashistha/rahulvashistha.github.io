@@ -25,6 +25,9 @@ SITE.projects = [
       ["~60", "UI issues closed", "Tracked and resolved across the five screens."]
     ],
     decisions: [
+      "A welcome page where Go only unlocks the geographies a user is allowed to see, so security is settled before any page loads",
+      "One trend visual, six measures: buttons switch Execution between calls, segment, channel, reach, call frequency and programs",
+      "When a view doesn’t apply, the visual says so in plain words instead of showing a misleading chart",
       "Growth indicators use three states (grey, green, red) on every screen, so “no change” never reads like “no data”",
       "A seven-card KPI row that wrapped badly became three grouped cards",
       "Territory, region, area and national reference labels hide themselves as you drill into a narrower geography",
@@ -34,8 +37,18 @@ SITE.projects = [
     ],
     tags: ["Power BI", "DAX", "Power Query", "TMDL", "Row-level security", "Field parameters", "Bridge tables", "Databricks SQL"],
     filters: ["DAX", "Data modelling", "Databricks", "Performance", "Security", "Report design"],
-    visual: { mock: "pyl" },
-    screenshots: [], /* PENDING: Lantheus commercial platform screenshots */
+    visual: { mock: "pyl", hint: "Start on the welcome page and press Go, then use the page buttons and chart buttons. Layout follows the real report; every value and name is sample data." },
+    /* Real screenshots, every value, name and logo blurred (tools/redact.py). Only interface labels stay sharp. */
+    screenshots: [
+      { src: "assets/projects/pyl-1-welcome.webp", caption: "Welcome page: Go only unlocks permitted geographies" },
+      { src: "assets/projects/pyl-2-execution.webp", caption: "Execution: KPI cards, calls trend, engagement table" },
+      { src: "assets/projects/pyl-3-execution-channel.webp", caption: "Execution: the same visual switched to call channel" },
+      { src: "assets/projects/pyl-4-performance.webp", caption: "Performance: doses, ordering sites, site status" },
+      { src: "assets/projects/pyl-5-performance-empty-state.webp", caption: "Performance: plain-language empty state" },
+      { src: "assets/projects/pyl-6-opportunity.webp", caption: "Opportunity: segment cards and share mix" },
+      { src: "assets/projects/pyl-7-quota.webp", caption: "Quota: actuals against goals, territory matrix" },
+      { src: "assets/projects/pyl-8-customer-360.webp", caption: "Customer 360: site view" }
+    ],
     story: [
       ["problem", "Fragmented reports, uneven security", "The commercial team worked across scattered legacy reports with no shared governance behind them."],
       ["approach", "Reconcile before you trust", "Every fix was checked against exported data and legacy benchmark reports, not just a visual that looked right."],
@@ -83,8 +96,10 @@ SITE.projects = [
     ],
     tags: ["Power BI", "DAX", "Power Query", "Composite model", "Azure Databricks", "Unity Catalog", "Spark SQL"],
     filters: ["DAX", "Data modelling", "Databricks", "Performance", "Security", "Report design"],
-    visual: { mock: "cx" },
-    screenshots: [], /* PENDING: Lantheus site operations screenshots */
+    visual: { mock: "cx", hint: "Pick a different site in Site search, then try Weekly or Monthly, Today or Tomorrow, and Active or All. Layout follows the real report; every value and name is sample data." },
+    screenshots: [
+      { src: "assets/projects/cx-1-site-operations.webp", caption: "Site operations overview: one page, four zones" }
+    ],
     story: [
       ["problem", "A disruption needs answers fast", "When a partner facility goes down, operations staff need validated alternates for the affected site, right away."],
       ["approach", "One page, one workflow", "Pick a site, review alternates, compare, contact. No tabs to hunt through."],

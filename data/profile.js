@@ -31,7 +31,8 @@ SITE.profile = {
   /* Story mode opens and closes with these chapters; projects fill the middle. */
   prologue: { id: "prologue", kicker: "2018 to 2022", title: "Where it started", frames: [
     ["start", "Engineering at Pune University", "Computer Science at Savitribai Phule Pune University, from 2018 to 2022."],
-    ["learn", "Learning in lockdown", "Nine Coursera courses in five months of 2020, from Python to Google Cloud."],
+    ["learn", "Learning in lockdown", "A lockdown spent on Coursera, from Python to Google Cloud, plus a month volunteering with an NGO."],
+    ["learn", "First paper, first internship", "In 2021: a software development internship and a published machine-learning paper on heart-disease prediction."],
     ["start", "First role", "Joined Hexaware Technologies in 2022 and started building Power BI for EY."]
   ]},
   epilogue: { id: "epilogue", kicker: "Now", title: "Next chapter", frames: [
@@ -62,6 +63,16 @@ SITE.profile = {
     ["Platforms and automation", ["Power Automate", "Power Apps", "Azure DevOps", "ServiceNow", "SAP BusinessObjects", "Service principal auth"]],
     ["AI in analytics", ["Microsoft Copilot", "GitHub Copilot", "ChatGPT", "Q&A visual", "Key Influencers", "Smart Narratives", "GenAI summary notes"]],
     ["Working with people", ["Stakeholder management", "Requirement gathering", "End-user documentation", "Power BI training", "Internal audits"]]
+  ],
+
+  /* Visitor analytics (GoatCounter, free and cookie-free). Paste your site code, e.g. "rahulvashistha"
+     for https://rahulvashistha.goatcounter.com. Leave empty to switch analytics off. */
+  analytics: { goatcounter: "" },
+
+  /* Publications, shown under Experience and credentials */
+  publications: [
+    { title: "Heart Disease Prediction Using Machine Learning Algorithms and Models", venue: "IJARCCE, Vol. 10, Issue 12, December 2021",
+      note: "Written with three classmates in my final year of engineering.", link: "https://doi.org/10.17148/IJARCCE.2021.101223" }
   ],
 
   skillSlicer: ["All", "DAX", "Data modelling", "Databricks", "Performance", "Security", "Automation", "Report design"]

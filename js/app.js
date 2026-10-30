@@ -39,6 +39,9 @@ const TIPS = {};
 /* ---------- derived data ---------- */
 const CERTS = TL.filter(x => x.type === "cert" && x.tier === "certification").sort(byDateDesc);
 const COURSES = TL.filter(x => x.type === "cert" && x.tier === "course").sort(byDateDesc);
+const ASSESS = TL.filter(x => x.type === "cert" && x.tier === "assessment").sort(byDateDesc);
+const TODAY = new Date().toISOString().slice(0, 10);
+const validity = c => !c.expires ? "" : (c.expires >= TODAY ? `Valid until <b>${fmtDate(c.expires)}</b>` : `Expired <b>${fmtDate(c.expires)}</b>`);
 const MILES = TL.filter(x => x.type === "milestone");
 const PHOTOS = TL.filter(x => x.type === "photo" && x.image).sort(byDateDesc);
 
@@ -117,7 +120,7 @@ function kpiButton(k, key){
 
 /* ---------- interactive mocks ---------- */
 const MSTATE = new Map(); let mockSeq = 0;
-function mockMount(key){ const id = `mock-${++mockSeq}`; MSTATE.set(id, { key, page: 0, t: {} }); return `<div class="mock" id="${id}">${C.mock(key, MSTATE.get(id))}</div>`; }
+function mockMount(key){ const id = `mock-${++mockSeq}`; MSTATE.set(id, { key, page: SITE.mocks[key].start || 0, t: {} }); return `<div class="mock" id="${id}">${C.mock(key, MSTATE.get(id))}</div>`; }
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-mpage],[data-mtog]"); if (!b) return;
   const host = b.closest(".mock"), st = MSTATE.get(host && host.id); if (!st) return;
@@ -235,6 +238,8 @@ function renderProfessional(){
       <ul class="mini-certs">${CERTS.map(c => `<li><b>${esc(c.code)}</b><span>${esc(c.title)}</span></li>`).join("")}</ul></div>
   </div>
 
+  ${P.publications && P.publications.length ? `<div class="visual pubs" style="margin-top:16px"><h3 class="v-title">Publication</h3><p class="v-sub">Peer-reviewed journal</p>${P.publications.map(pb => `<div class="pub"><a href="${esc(pb.link)}" target="_blank" rel="noopener"><b>${esc(pb.title)}</b></a><span>${esc(pb.venue)}. ${esc(pb.note)}</span></div>`).join("")}</div>` : ""}
+
   <h2 class="section">Toolkit</h2>
   <p class="section-sub">What I use day to day, grouped by the job it does.</p>
   <div class="visual skills">${P.skills.map(([g, items]) => `<div><h4>${esc(g)}</h4><div class="chips">${items.map(i => `<span class="chip">${esc(i)}</span>`).join("")}</div></div>`).join("")}</div>
@@ -269,9 +274,12 @@ function renderCase(id){
   <div class="board">${p.story.map(([s, h, t]) => `<div class="board-f">${C.sketch(s)}<small>${esc(STAGE[s])}</small><h4>${esc(h)}</h4><p>${esc(t)}</p></div>`).join("")}</div>
 
   <h2 class="section">${p.visual.mock ? "The report" : "The shape of it"}</h2>
-  <p class="section-sub">${p.visual.mock ? "Click the page tabs and toggles. Layout follows the real report; every value and name is sample data." : "Real figures from the engagement."}</p>
+  <p class="section-sub">${p.visual.mock ? esc(p.visual.hint || "Click the page tabs and toggles. Layout follows the real report; every value and name is sample data.") : "Real figures from the engagement."}</p>
   <div class="report-frame">${projectVisual(p)}
-    ${p.screenshots && p.screenshots.length ? `<div class="shots">${p.screenshots.map((s, k) => `<button type="button" data-lightbox="${esc(s)}" data-lb-title="${esc(p.title)} screenshot ${k + 1}"><img src="${esc(s)}" alt="${esc(p.title)} screenshot ${k + 1}" loading="lazy"></button>`).join("")}</div>` : ""}</div>
+</div>
+  ${p.screenshots && p.screenshots.length ? `<h2 class="section">The real report</h2><p class="section-sub">Screenshots of what shipped. Every value, name and logo is blurred; only interface labels stay sharp.</p>
+  <div class="shots">${p.screenshots.map((sh, k) => { const o = typeof sh === "string" ? { src: sh, caption: `Screenshot ${k + 1}` } : sh;
+    return `<figure><button type="button" data-lightbox="${esc(o.src)}" data-lb-title="${esc(o.caption)}" data-lb-group="shots-${p.id}"><img src="${esc(o.src)}" alt="${esc(o.caption)}, data blurred" loading="lazy"></button><figcaption>${esc(o.caption)}</figcaption></figure>`; }).join("")}</div>` : ""}
 
   <div class="two" style="margin-top:16px">
     <div class="visual"><h3 class="v-title">Model view</h3><p class="v-sub">${esc(p.model)}. Simplified; table names are generic.</p>
@@ -351,7 +359,7 @@ function archiveRows(){
   const q = archQ.trim().toLowerCase();
   const rows = COURSES.filter(c => (archCat === "All" || c.category === archCat) && (!q || (c.title + " " + c.issuer).toLowerCase().includes(q)));
   $("#arch-count").textContent = `${rows.length} of ${COURSES.length} courses`;
-  $("#arch-body").innerHTML = rows.length ? rows.map(c => `<tr><td class="nowrap num">${fmtDate(c.date)}</td><td>${esc(c.title)}</td><td>${esc(c.issuer)}</td><td><span class="cat-tag">${esc(c.category)}</span></td><td>${c.pdf ? `<a href="${esc(c.pdf)}" target="_blank" rel="noopener">PDF</a>` : ""}</td></tr>`).join("")
+  $("#arch-body").innerHTML = rows.length ? rows.map(c => `<tr><td class="nowrap num">${fmtDate(c.date)}</td><td>${esc(c.title)}</td><td>${esc(c.issuer)}</td><td><span class="cat-tag">${esc(c.category)}</span></td><td>${c.image ? `<button type="button" class="linkbtn" data-lightbox="${esc(c.image)}" data-lb-title="${esc(c.title)}">View</button>` : c.pdf ? `<a href="${esc(c.pdf)}" target="_blank" rel="noopener">PDF</a>` : ""}</td></tr>`).join("")
     : `<tr><td colspan="5">No courses match. Clear the search or pick another category.</td></tr>`;
 }
 function renderFame(){
@@ -359,10 +367,10 @@ function renderFame(){
   const dated = CERTS.filter(c => c.date), first = dated.length ? dated[dated.length - 1] : null, latest = dated[0];
   const cats = ["All", ...new Set(COURSES.map(c => c.category))];
   el.innerHTML = `
-  <div class="page-head"><div class="visual hero-main"><h1>Hall of Fame</h1><p class="lede">Proctored certifications up top, with the certificate behind each one. Every course I’ve finished sits in the archive below, linked to its PDF.</p></div>
+  <div class="page-head"><div class="visual hero-main"><h1>Hall of Fame</h1><p class="lede">Exams I’ve passed, with the certificate behind each one, then the skill tests and courses that actually shaped the work. Curated, not exhaustive.</p></div>
     <div class="fame-kpis">
       <div class="kpi"><div class="kpi-v num">${CERTS.length}</div><div class="kpi-l">certifications</div></div>
-      <div class="kpi"><div class="kpi-v num">${COURSES.length}</div><div class="kpi-l">courses completed</div></div>
+      <div class="kpi"><div class="kpi-v num">${COURSES.length + ASSESS.length}</div><div class="kpi-l">courses and skill assessments</div></div>
       <div class="kpi"><div class="kpi-v num">${first ? first.date.slice(0, 4) : "—"}</div><div class="kpi-l">first certification${first ? `, ${esc(first.code)}` : ""}</div></div>
       <div class="kpi"><div class="kpi-v num">${latest ? esc(latest.code) : "—"}</div><div class="kpi-l">latest certification${latest ? `, ${fmtDate(latest.date)}` : ""}</div></div>
     </div></div>
@@ -370,14 +378,17 @@ function renderFame(){
   <h2 class="section">Learning curve</h2><p class="section-sub">Cumulative certifications and courses over time. Select a point to jump to that certificate.</p>
   <div class="visual curve">${curveSVG() || `<p class="empty-note">The curve appears once two or more items have dates.</p>`}</div>
 
-  <h2 class="section">Certifications</h2><p class="section-sub">Earned dates come from the certificates themselves.</p>
+  <h2 class="section">Certifications</h2><p class="section-sub">Earned and expiry dates come from the certificates themselves.</p>
   <div class="plaques">${CERTS.map(c => `<article class="plaque" id="cert-${esc(c.code)}"><div class="plaque-in">
-    <p class="plaque-issuer">${esc(c.issuer || "Issuer to be added")}</p><div class="plaque-code">${esc(c.code)}</div><h3>${esc(c.title)}</h3>
-    <p class="plaque-meta">${c.date ? `Earned <b>${fmtDate(c.date)}</b>` : "Certificate to be added"}${c.credential ? `<br>Credential <b>${esc(c.credential)}</b>` : ""}</p>
+    <p class="plaque-issuer">${esc(c.issuer || "Issuer to be added")}</p><div class="plaque-code${c.code.length > 8 ? " long" : ""}">${esc(c.code)}</div><h3>${esc(c.title)}</h3>
+    <p class="plaque-meta">${c.date ? `Earned <b>${fmtDate(c.date)}</b>` : "Certificate to be added"}${c.expires ? `<br>${validity(c)}` : ""}${c.credential ? `<br>Credential <b>${esc(c.credential)}</b>` : ""}</p>
     <div class="plaque-act">${c.image ? `<button type="button" class="btn" data-lightbox="${esc(c.image)}" data-lb-title="${esc(c.code)}: ${esc(c.title)}" data-lb-link="${esc(c.pdf || "")}">View certificate</button>` : ""}${c.verify ? `<a class="btn" href="${esc(c.verify)}" target="_blank" rel="noopener">Verify</a>` : ""}</div>
   </div></article>`).join("")}</div>
 
-  <h2 class="section">Archive</h2><p class="section-sub">Courses and exam prep, newest first.</p>
+  ${ASSESS.length ? `<h2 class="section">Skill assessments</h2><p class="section-sub">Timed tests, highest level passed in each skill.</p>
+  <div class="plaques small">${ASSESS.map(c => `<article class="plaque"><div class="plaque-in"><p class="plaque-issuer">${esc(c.issuer)}</p><div class="plaque-code${c.code.length > 8 ? " long" : ""}">${esc(c.code)}</div><h3>${esc(c.title)}</h3><p class="plaque-meta">Passed <b>${fmtDate(c.date)}</b></p>
+    <div class="plaque-act">${c.image ? `<button type="button" class="btn" data-lightbox="${esc(c.image)}" data-lb-title="${esc(c.issuer)}: ${esc(c.title)}">View certificate</button>` : ""}</div></div></article>`).join("")}</div>` : ""}
+  <h2 class="section">Courses</h2><p class="section-sub">Substantial courses that shaped the work, newest first. Exam prep, participation certificates and short soft-skill courses are left out on purpose.</p>
   <div class="archive-tools"><div class="slicer" id="arch-cats" role="group" aria-label="Category">${cats.map(c => `<button type="button" aria-pressed="${c === archCat}" data-cat="${esc(c)}">${esc(c)}</button>`).join("")}</div>
     <label class="sr-only" for="arch-q">Search courses</label><input id="arch-q" type="search" placeholder="Search courses" value="${esc(archQ)}"><span class="slicer-count" id="arch-count" aria-live="polite"></span></div>
   <div class="table-wrap"><table class="dtable"><thead><tr><th>Date</th><th>Course</th><th>Provider</th><th>Category</th><th>Certificate</th></tr></thead><tbody id="arch-body"></tbody></table></div>
@@ -400,7 +411,7 @@ const YEARS = (() => {
 let ybYear = YEARS[YEARS.length - 1];
 function spreadHTML(y){
   const x = YB[y] || {}, inYear = it => yearOf(it.date) === y;
-  const certs = CERTS.filter(inYear), courses = COURSES.filter(inYear), miles = MILES.filter(inYear).sort((a, b) => (a.date || "").localeCompare(b.date || "")), photos = PHOTOS.filter(inYear);
+  const certs = CERTS.filter(inYear), assess = ASSESS.filter(inYear), courses = COURSES.filter(inYear), miles = MILES.filter(inYear).sort((a, b) => (a.date || "").localeCompare(b.date || "")), photos = PHOTOS.filter(inYear);
   const projs = PROJ.filter(p => p.years[0] <= y && y <= p.years[1]);
   const cover = x.cover || (photos[0] && photos[0].image);
   const i = YEARS.indexOf(y);
@@ -410,10 +421,11 @@ function spreadHTML(y){
       ${x.superlative ? `<div class="yb-super"><small>Voted</small><b>${esc(x.superlative)}</b>${x.quote ? `<p class="yb-quote">“${esc(x.quote)}”</p>` : ""}</div>` : ""}</div>
     <div class="yb-main">
       <div class="yb-kpis"><div><b class="num">${certs.length}</b><span>certifications</span></div><div><b class="num">${courses.length}</b><span>courses</span></div><div><b class="num">${projs.length}</b><span>projects</span></div></div>
-      ${miles.length ? `<h4>Milestones</h4><ul class="yb-list">${miles.map(m => `<li><span>${fmtDate(m.date)}</span><div>${esc(m.title)}${m.subtitle ? `<br><span>${esc(m.subtitle)}</span>` : ""}</div></li>`).join("")}</ul>` : ""}
+      ${miles.length ? `<h4>Milestones</h4><ul class="yb-list">${miles.map(m => `<li><span>${fmtDate(m.date)}</span><div>${m.link ? `<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.title)}</a>` : esc(m.title)}${m.subtitle ? `<br><span>${esc(m.subtitle)}</span>` : ""}</div></li>`).join("")}</ul>` : ""}
       ${projs.length ? `<h4>Projects</h4><ul class="yb-list">${projs.map(p => `<li><span>${p.years[0] === p.years[1] ? p.years[0] : `${p.years[0]}–${String(p.years[1]).slice(2)}`}</span><a href="#case-${p.id}">${esc(p.title)}</a></li>`).join("")}</ul>` : ""}
-      ${certs.length ? `<h4>Certifications</h4><ul class="yb-list">${certs.slice().reverse().map(c => `<li><span>${fmtDate(c.date).split(" ")[0]}</span><a href="#hall-of-fame" data-cert-link="${esc(c.code)}">${esc(c.code)}: ${esc(c.title)}</a></li>`).join("")}</ul>` : ""}
-      ${courses.length ? `<h4>Courses</h4><ul class="yb-list">${courses.slice().reverse().slice(0, 6).map(c => `<li><span>${fmtDate(c.date).split(" ")[0]}</span><div>${esc(c.title)}</div></li>`).join("")}${courses.length > 6 ? `<li><span></span><a href="#hall-of-fame">and ${courses.length - 6} more in the archive</a></li>` : ""}</ul>` : ""}
+      ${certs.length ? `<h4>Certifications</h4><ul class="yb-list">${certs.slice().reverse().map(c => `<li><span>${fmtDate(c.date).split(" ")[0]}</span><a href="#hall-of-fame" data-cert-link="${esc(c.code)}">${esc(c.title.startsWith(c.code) ? c.title : `${c.code}: ${c.title}`)}</a></li>`).join("")}</ul>` : ""}
+      ${assess.length ? `<h4>Skill assessments</h4><ul class="yb-list">${assess.slice().reverse().map(c => `<li><span>${fmtDate(c.date).split(" ")[0]}</span><div>${esc(c.issuer)}: ${esc(c.title)}</div></li>`).join("")}</ul>` : ""}
+      ${courses.length ? `<h4>Courses</h4><ul class="yb-list">${courses.slice().reverse().slice(0, 6).map(c => `<li><span>${fmtDate(c.date).split(" ")[0]}</span><div>${esc(c.title)}</div></li>`).join("")}${courses.length > 6 ? `<li><span></span><a href="#hall-of-fame">and ${courses.length - 6} more in the Hall of Fame</a></li>` : ""}</ul>` : ""}
       ${photos.length > 1 ? `<h4>Photos</h4><div class="album" style="columns:3 120px">${photos.map(ph => photoHTML(ph)).join("")}</div>` : ""}
       <div class="yb-nav">${i > 0 ? `<button class="btn" type="button" data-year="${YEARS[i - 1]}" aria-label="Previous year, ${YEARS[i - 1]}">${ICON.back} ${YEARS[i - 1]}</button>` : "<span></span>"}${i < YEARS.length - 1 ? `<button class="btn" type="button" data-year="${YEARS[i + 1]}" aria-label="Next year, ${YEARS[i + 1]}">${YEARS[i + 1]} ${ICON.fwd}</button>` : ""}</div>
     </div></div>`;
@@ -437,12 +449,22 @@ function renderAlbum(){
 
 /* ---------- lightbox ---------- */
 const lb = $("#lightbox");
-document.addEventListener("click", e => {
-  const b = e.target.closest("[data-lightbox]"); if (!b) return;
+let lbGroup = [], lbIdx = 0;
+function lbShow(b){
   $("#lb-img").src = b.dataset.lightbox; $("#lb-img").alt = b.dataset.lbTitle || ""; $("#lb-title").textContent = b.dataset.lbTitle || "";
   const link = b.dataset.lbLink; $("#lb-link").hidden = !link; if (link) $("#lb-link").href = link;
-  lb.showModal();
+  const many = lbGroup.length > 1; $("#lb-prev").hidden = !many; $("#lb-next").hidden = !many;
+  $("#lb-count").textContent = many ? `${lbIdx + 1} of ${lbGroup.length}` : "";
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-lightbox]"); if (!b) return;
+  lbGroup = b.dataset.lbGroup ? $$(`[data-lb-group="${b.dataset.lbGroup}"]`) : [b]; lbIdx = Math.max(0, lbGroup.indexOf(b));
+  lbShow(b); if (!lb.open) lb.showModal();
 });
+const lbStep = d => { if (lbGroup.length < 2) return; lbIdx = (lbIdx + d + lbGroup.length) % lbGroup.length; lbShow(lbGroup[lbIdx]); };
+$("#lb-prev").addEventListener("click", () => lbStep(-1));
+$("#lb-next").addEventListener("click", () => lbStep(1));
+lb.addEventListener("keydown", e => { if (e.key === "ArrowRight") lbStep(1); if (e.key === "ArrowLeft") lbStep(-1); });
 $("#lb-close").addEventListener("click", () => lb.close());
 lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
 
@@ -483,4 +505,21 @@ document.addEventListener("click", e => {
   const cl = e.target.closest("[data-cert-link]"); if (cl) { e.preventDefault(); location.hash = "hall-of-fame"; setTimeout(() => { const t = document.getElementById("cert-" + cl.dataset.certLink); if (t) { t.scrollIntoView({ block: "center" }); t.classList.add("is-hl"); setTimeout(() => t.classList.remove("is-hl"), 1800); } }, 30); }
 });
 route(true);
+
+/* ---------- visitor analytics (off until a GoatCounter code is set in profile.js) ---------- */
+(function(){
+  const code = P.analytics && P.analytics.goatcounter;
+  if (!code || location.protocol === "file:") return;
+  window.goatcounter = { no_onload: true };
+  const page = () => ({ path: location.pathname + location.hash, title: document.title });
+  const sc = document.createElement("script");
+  sc.async = true; sc.src = "https://gc.zgo.at/count.js";
+  sc.setAttribute("data-goatcounter", `https://${encodeURIComponent(code)}.goatcounter.com/count`);
+  sc.onload = () => { if (window.goatcounter.count) window.goatcounter.count(page()); };
+  document.head.appendChild(sc);
+  addEventListener("hashchange", () => { if (window.goatcounter.count) window.goatcounter.count(page()); });
+  document.addEventListener("click", e => {
+    if (e.target.closest('a[href$=".pdf"][download]') && window.goatcounter.count) window.goatcounter.count({ path: "resume-download", title: "Résumé downloaded", event: true });
+  });
+})();
 })();

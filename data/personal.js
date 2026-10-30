@@ -33,13 +33,15 @@ SITE.personal = {
   values: [
     ["Curiosity", "New books, new places, new tech. I’d rather ask one more question than assume."],
     ["Staying active", "Sport is part of most weekdays, not a weekend extra."],
-    ["Community", "Book clubs and CSR activities keep me connected beyond work."],
+    ["Community", "Book clubs, CSR activities and NGO volunteering keep me connected beyond work."],
     ["Good banter", "Wit, a little sarcasm and conversations that go somewhere unplanned."]
   ],
   funfacts: [
     "My reading swings between horror novels and Percy Jackson.",
     "I’ve logged 269 anime and rated 50 of them Best.",
     "I once pulled a report’s whole design system out of its raw XML instead of eyeballing it.",
-    "This site cost nothing to build and host, and it’s designed as a Power BI report."
+    "This site cost nothing to build and host, and it’s designed as a Power BI report.",
+    "In college I entered five quizzes in one online festival, hosted by IIT Bombay, IIM Calcutta, IIM Indore, SRCC and NSUT.",
+    "I published a machine-learning paper before I graduated."
   ]
 };

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rahul Vashistha | Power BI Consultant & Senior Data Analyst</title>
+<meta name="description" content="Portfolio of Rahul Vashistha, Senior Data Analyst and Power BI Consultant. Enterprise BI, reporting migration and dashboard design.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2313618A'/><rect x='6' y='16' width='5' height='10' fill='%23E3A72F'/><rect x='13.5' y='10' width='5' height='16' fill='white'/><rect x='21' y='6' width='5' height='20' fill='white'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#E9EDF1; --panel:#FFFFFF; --panel-2:#F5F7F9; --line:#D3DAE2; --line-soft:#E4E9EE;
+  --ink:#16212C; --ink-2:#4A5868; --ink-3:#7A8796;
+  --accent:#13618A; --accent-ink:#FFFFFF; --mark:#E3A72F;
+  --d1:#13618A; --d2:#3FA7A3; --d3:#E3A72F; --d4:#B9C5D2; --d5:#C9573E;
+  --heat-1:#E3EEF4; --heat-2:#BCD6E4; --heat-3:#7FB1CC; --heat-4:#13618A;
+  --font:"Schibsted Grotesk","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --tabs-h:52px;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --canvas:#10151B; --panel:#18202A; --panel-2:#1E2833; --line:#2C3946; --line-soft:#24303C;
+    --ink:#E7ECF1; --ink-2:#AEB9C5; --ink-3:#7E8B99;
+    --accent:#4BA3D1; --accent-ink:#0C141B; --mark:#E8B248;
+    --d1:#4BA3D1; --d2:#4FC1BB; --d3:#E8B248; --d4:#3F4E5E; --d5:#E07A62;
+    --heat-1:#1F2E3B; --heat-2:#24485E; --heat-3:#2F6E91; --heat-4:#4BA3D1;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --canvas:#10151B; --panel:#18202A; --panel-2:#1E2833; --line:#2C3946; --line-soft:#24303C;
+  --ink:#E7ECF1; --ink-2:#AEB9C5; --ink-3:#7E8B99;
+  --accent:#4BA3D1; --accent-ink:#0C141B; --mark:#E8B248;
+  --d1:#4BA3D1; --d2:#4FC1BB; --d3:#E8B248; --d4:#3F4E5E; --d5:#E07A62;
+  --heat-1:#1F2E3B; --heat-2:#24485E; --heat-3:#2F6E91; --heat-4:#4BA3D1;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--tabs-h) + 24px)}
+img{max-width:100%;display:block}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Title bar */
+.titlebar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--panel);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--panel)}
+.titlebar-in{max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px}
+.mono{width:32px;height:32px;flex:none}
+.tb-name{font-weight:700;font-size:15px;line-height:1.2}
+.tb-meta{font-size:12.5px;color:var(--ink-3)}
+.tb-actions{margin-left:auto;display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;font:600 14px/1 var(--font);padding:9px 14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-decoration:none;cursor:pointer}
+.btn:hover{border-color:var(--ink-3)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{filter:brightness(1.08);border-color:var(--accent)}
+.btn svg{width:15px;height:15px}
+
+/* Layout */
+.wrap{max-width:1200px;margin:0 auto;padding:20px}
+.page{display:none}
+.page.is-active{display:block;animation:pagein .25s ease-out}
+@keyframes pagein{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.page.is-active{animation:none}}
+.visual{background:var(--panel);border:1px solid var(--line);padding:22px}
+.v-title{font-size:15px;font-weight:700;margin:0 0 4px}
+.v-sub{font-size:13.5px;color:var(--ink-3);margin:0 0 16px}
+.grid{display:grid;gap:16px}
+section{margin-top:16px}
+h2.section{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:36px 0 4px}
+p.section-sub{margin:0 0 16px;color:var(--ink-2);max-width:68ch}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.hero-main{padding:34px 34px 30px;display:flex;flex-direction:column}
+.hero h1{font-size:clamp(2.5rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.035em;font-weight:800;margin:0}
+.hero .role{font-size:clamp(1.05rem,1.6vw,1.25rem);font-weight:600;color:var(--accent);margin:14px 0 0}
+.hero .lede{font-size:17px;color:var(--ink-2);max-width:56ch;margin:18px 0 0}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px 20px;margin:22px 0 0;padding:0;list-style:none;font-size:14px;color:var(--ink-2)}
+.hero .facts li{display:flex;gap:6px;align-items:center}
+.hero .facts svg{width:15px;height:15px;color:var(--ink-3)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:26px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);padding:18px 18px 16px;display:flex;flex-direction:column;justify-content:space-between;min-height:128px;position:relative}
+.kpi::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:3px;background:var(--accent)}
+.kpi-v{font-size:clamp(2rem,3.4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1}
+.kpi-l{font-size:13.5px;color:var(--ink-2);line-height:1.35;margin-top:10px}
+
+/* Slicer */
+.slicer{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);background:var(--panel);width:max-content;max-width:100%}
+.slicer-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.slicer-label{font-size:13.5px;color:var(--ink-2);font-weight:600}
+.slicer button{font:500 14px/1 var(--font);padding:10px 14px;border:0;border-right:1px solid var(--line);background:transparent;color:var(--ink-2);cursor:pointer}
+.slicer button:last-child{border-right:0}
+.slicer button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.slicer button:hover:not([aria-pressed="true"]){background:var(--panel-2);color:var(--ink)}
+.slicer-count{font-size:13.5px;color:var(--ink-3)}
+
+/* Projects */
+.project{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0;background:var(--panel);border:1px solid var(--line);margin-bottom:16px}
+.project[hidden]{display:none}
+.p-visual{background:var(--panel-2);border-right:1px solid var(--line);padding:18px;display:flex;align-items:center}
+.p-visual img{border:1px solid var(--line)}
+.p-body{padding:24px 26px}
+.p-client{font-size:13.5px;color:var(--ink-3);margin:0 0 6px}
+.p-body h3{font-size:21px;line-height:1.2;letter-spacing:-.01em;margin:0 0 14px}
+.p-body dl{margin:0;display:grid;gap:12px}
+.p-body dt{font-size:13px;font-weight:700;color:var(--ink)}
+.p-body dd{margin:2px 0 0;font-size:15px;color:var(--ink-2)}
+.p-body dd ul{margin:4px 0 0;padding-left:18px}
+.p-body dd li{margin:2px 0}
+.impact{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.impact span{font-size:13.5px;font-weight:600;padding:6px 10px;background:var(--panel-2);border:1px solid var(--line-soft)}
+.impact b{color:var(--accent);font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.chip{font-size:12.5px;padding:4px 9px;border:1px solid var(--line);color:var(--ink-2);background:var(--panel)}
+
+/* Mini report mockup */
+.mock{width:100%;background:var(--panel);border:1px solid var(--line);font-size:11px;color:var(--ink)}
+.mock-top{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line-soft)}
+.mock-title{font-weight:700;font-size:12.5px}
+.mock-tag{margin-left:auto;font-size:10.5px;color:var(--ink-3);border:1px dashed var(--line);padding:2px 6px;white-space:nowrap}
+.mock-filters{display:flex;gap:6px;flex-wrap:wrap;padding:8px 10px 0}
+.mock-filters span{border:1px solid var(--line);padding:3px 7px;color:var(--ink-2);background:var(--panel-2)}
+.mock-nav{display:flex;flex-wrap:wrap;padding:8px 10px 0;gap:0}
+.mock-nav span{padding:4px 8px;border:1px solid var(--line);margin-right:-1px;color:var(--ink-3);background:var(--panel-2)}
+.mock-nav span.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.mock-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 10px}
+.mock-kpi{border:1px solid var(--line-soft);padding:6px 8px;border-left:2px solid var(--accent)}
+.mock-kpi b{display:block;font-size:16px;font-weight:800;letter-spacing:-.02em}
+.mock-kpi small{color:var(--ink-3);font-size:10px}
+.mock-row{display:grid;grid-template-columns:1.1fr 1fr;gap:6px;padding:0 10px 10px}
+.mock-cell{border:1px solid var(--line-soft);padding:6px 8px;min-width:0}
+.mock-cell h5{margin:0 0 4px;font-size:10.5px;font-weight:700;color:var(--ink-2)}
+.mock svg{width:100%;height:auto;display:block;overflow:visible}
+.mock svg text{font-family:var(--font);font-size:9px;fill:var(--ink-3)}
+.mock svg .lbl-strong{fill:var(--ink);font-weight:700}
+.s1{fill:var(--d1)} .s2{fill:var(--d2)} .s3{fill:var(--d3)} .s4{fill:var(--d4)} .s5{fill:var(--d5)}
+.ln1{stroke:var(--d1);fill:none;stroke-width:2} .ln-th{stroke:var(--d5);stroke-dasharray:3 3;stroke-width:1.2} .grid-ln{stroke:var(--line-soft);stroke-width:1}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;color:var(--ink-3);font-size:10px}
+.legend i{display:inline-block;width:8px;height:8px;margin-right:3px;vertical-align:-1px}
+.mtable{width:100%;border-collapse:collapse;font-size:10px}
+.mtable th{text-align:left;font-weight:700;color:var(--ink-2);border-bottom:1px solid var(--line);padding:3px 4px}
+.mtable td{padding:3px 4px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+.mtable td.n{text-align:right}
+.h1c{background:var(--heat-1)} .h2c{background:var(--heat-2)} .h3c{background:var(--heat-3);color:#fff} .h4c{background:var(--heat-4);color:#fff}
+.pill{display:inline-block;padding:1px 5px;font-size:9.5px;border:1px solid var(--line)}
+.pill.ok{border-color:var(--d2);color:var(--d2)} .pill.wip{border-color:var(--d3);color:var(--d3)} .pill.todo{color:var(--ink-3)}
+
+/* Experience and certs */
+.two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{position:relative;padding:0 0 22px 26px;border-left:1px solid var(--line);margin-left:6px}
+.timeline li:last-child{padding-bottom:0;border-left-color:transparent}
+.timeline li::before{content:"";position:absolute;left:-6px;top:4px;width:11px;height:11px;background:var(--panel);border:2px solid var(--accent)}
+.timeline li.now::before{background:var(--accent)}
+.t-when{font-size:13px;color:var(--ink-3);font-weight:600}
+.t-what{font-size:16.5px;font-weight:700;margin:2px 0 0}
+.t-where{font-size:14.5px;color:var(--ink-2);margin:2px 0 0}
+.certs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.certs li{border:1px solid var(--line-soft);padding:10px 12px;background:var(--panel-2)}
+.certs b{display:block;font-size:14.5px}
+.certs span{font-size:12.5px;color:var(--ink-3)}
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.skills h4{margin:0 0 10px;font-size:14.5px}
+.skills .chips{margin-top:0}
+
+/* Personal */
+.p-hero{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.p-hero h1{font-size:clamp(2.3rem,5vw,3.8rem);line-height:1;letter-spacing:-.03em;font-weight:800;margin:0}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.principle h4{margin:0 0 6px;font-size:17px}
+.principle p{margin:0;color:var(--ink-2);font-size:15px}
+.fav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.fav ul{margin:0;padding-left:18px;color:var(--ink-2)}
+.fav li{margin:3px 0}
+.empty{border:1px dashed var(--line);background:transparent;padding:16px;color:var(--ink-3);font-size:14px}
+.empty b{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:2px}
+.about-facts{display:grid;gap:10px;margin:0}
+.about-facts div{display:grid;grid-template-columns:110px 1fr;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--line-soft)}
+.about-facts div:last-child{border-bottom:0;padding-bottom:0}
+.about-facts dt{font-size:13.5px;color:var(--ink-3)}
+.about-facts dd{margin:0;font-weight:600}
+
+/* Page tabs (bottom, like a report) */
+.pagetabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--panel);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.pagetabs-in{max-width:1200px;margin:0 auto;padding:0 20px;height:var(--tabs-h);display:flex;align-items:stretch;gap:0}
+.pagetabs a{display:flex;align-items:center;padding:0 22px;font-weight:600;font-size:14.5px;color:var(--ink-2);text-decoration:none;border-right:1px solid var(--line-soft);position:relative}
+.pagetabs a:first-child{border-left:1px solid var(--line-soft)}
+.pagetabs a[aria-current="page"]{color:var(--ink);background:var(--panel-2)}
+.pagetabs a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--mark)}
+.pagetabs a:hover:not([aria-current="page"]){color:var(--ink);background:var(--panel-2)}
+.page-count{margin-left:auto;align-self:center;font-size:13px;color:var(--ink-3)}
+
+footer{margin-top:40px;font-size:13.5px;color:var(--ink-3)}
+
+/* Responsive */
+@media (max-width:960px){
+  .hero,.p-hero,.two-col{grid-template-columns:1fr}
+  .project{grid-template-columns:1fr}
+  .p-visual{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:600px){
+  .wrap{padding:12px}
+  .titlebar-in{padding:8px 12px}
+  .tb-meta{display:none}
+  .tb-actions .btn span{display:none}
+  .hero-main{padding:24px 20px}
+  .visual{padding:18px}
+  .kpi{min-height:110px;padding:14px}
+  .p-body{padding:20px}
+  .p-visual{padding:10px}
+  .certs{grid-template-columns:1fr}
+  .mock-row{grid-template-columns:1fr}
+  .slicer button{padding:9px 11px;font-size:13.5px}
+  .pagetabs-in{padding:0 12px}
+  .pagetabs a{padding:0 16px}
+  .about-facts div{grid-template-columns:1fr;gap:0}
+}
+</style>
+</head>
+<body>
+
+<header class="titlebar">
+  <div class="titlebar-in">
+    <svg class="mono" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="var(--accent)"/><rect x="6" y="16" width="5" height="10" fill="var(--mark)"/><rect x="13.5" y="10" width="5" height="16" fill="var(--accent-ink)"/><rect x="21" y="6" width="5" height="20" fill="var(--accent-ink)"/></svg>
+    <div>
+      <div class="tb-name">Rahul Vashistha</div>
+      <div class="tb-meta" id="refreshed"></div>
+    </div>
+    <div class="tb-actions">
+      <a class="btn" id="tb-linkedin" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.6 8.65 21 11.2 21 14.5V21h-4v-5.7c0-1.36-.03-3.1-1.9-3.1-1.9 0-2.2 1.48-2.2 3v5.8H9z"/></svg>
+        <span>LinkedIn</span>
+      </a>
+      <a class="btn btn-primary" id="tb-email" aria-label="Email Rahul">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 6 9 7 9-7"/></svg>
+        <span>Email me</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PAGE 1: PROFESSIONAL ============ -->
+<main id="professional" class="page wrap" aria-label="Professional">
+  <div class="hero">
+    <div class="visual hero-main">
+      <h1>Rahul Vashistha</h1>
+      <p class="role" id="role"></p>
+      <p class="lede" id="lede"></p>
+      <ul class="facts" id="facts"></ul>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#work" data-scroll>See my work</a>
+        <a class="btn" id="hero-email">Get in touch</a>
+      </div>
+    </div>
+    <div class="kpis" id="kpis" aria-label="Career highlights"></div>
+  </div>
+
+  <h2 class="section" id="work">Selected work</h2>
+  <p class="section-sub">Each project shows a recreated report with sample data. Structure and layout match the real work; every number, name and label inside the visuals is made up.</p>
+  <div class="slicer-wrap">
+    <span class="slicer-label" id="slicer-label">Filter by skill</span>
+    <div class="slicer" id="slicer" role="group" aria-labelledby="slicer-label"></div>
+    <span class="slicer-count" id="slicer-count" aria-live="polite"></span>
+  </div>
+  <div id="projects"></div>
+
+  <h2 class="section">Experience and credentials</h2>
+  <p class="section-sub">Where I’ve worked, what I studied, and the certifications behind the work.</p>
+  <div class="two-col">
+    <div class="visual">
+      <h3 class="v-title">Career timeline</h3>
+      <p class="v-sub">Most recent first</p>
+      <ol class="timeline" id="timeline"></ol>
+    </div>
+    <div class="visual">
+      <h3 class="v-title">Certifications</h3>
+      <p class="v-sub" id="cert-sub"></p>
+      <ul class="certs" id="certs"></ul>
+    </div>
+  </div>
+
+  <h2 class="section">Toolkit</h2>
+  <p class="section-sub">What I use day to day, grouped by the job it does.</p>
+  <div class="visual skills" id="skills"></div>
+
+  <footer>Hand-built in plain HTML and hosted free on GitHub Pages.</footer>
+</main>
+
+<!-- ============ PAGE 2: PERSONAL ============ -->
+<main id="personal" class="page wrap" aria-label="Personal">
+  <div class="p-hero">
+    <div class="visual hero-main">
+      <h1 id="p-title"></h1>
+      <p class="lede" id="p-lede"></p>
+    </div>
+    <div class="visual">
+      <h3 class="v-title">At a glance</h3>
+      <p class="v-sub">The quick version</p>
+      <dl class="about-facts" id="about-facts"></dl>
+    </div>
+  </div>
+
+  <h2 class="section">How I work</h2>
+  <p class="section-sub">The rules I hold myself to, on every report and every project.</p>
+  <div class="principles" id="principles"></div>
+
+  <h2 class="section">Things I love</h2>
+  <p class="section-sub">Favourites, interests and the things that fill the time between refreshes.</p>
+  <div class="fav-grid" id="favs"></div>
+
+  <h2 class="section">Fun facts</h2>
+  <p class="section-sub">A few things you wouldn’t guess from my résumé.</p>
+  <div class="fav-grid" id="funfacts"></div>
+
+  <footer>Hand-built in plain HTML and hosted free on GitHub Pages.</footer>
+</main>
+
+<nav class="pagetabs" aria-label="Report pages">
+  <div class="pagetabs-in">
+    <a href="#professional" data-page="professional">Professional</a>
+    <a href="#personal" data-page="personal">Personal</a>
+    <span class="page-count" id="page-count"></span>
+  </div>
+</nav>
+
+<script>
+/* =====================================================================
+   CONTENT — edit everything here. Layout code below reads from this.
+   Empty arrays [] on the Personal page show a dashed "to fill" tile.
+   ===================================================================== */
+const DATA = {
+  contact: {
+    email: "rahulvashistha1412@gmail.com",
+    linkedin: "https://www.linkedin.com/in/REPLACE-WITH-YOUR-HANDLE/"
+  },
+  refreshed: "Data as of October 2026",
+  role: "Senior Data Analyst and Power BI Consultant",
+  lede: "I move enterprise reporting off legacy platforms and onto Power BI models people can trust. Four years of semantic models, DAX tuning and dashboard design for EY, ZS Associates and Amgen.",
+  facts: [
+    ["pin", "Pune, India"],
+    ["cap", "B.E. Computer Science, Pune University"],
+    ["badge", "Microsoft certified (PL-300)"]
+  ],
+  kpis: [
+    ["4+", "years building enterprise BI"],
+    ["~150", "legacy BusinessObjects reports in migration scope"],
+    ["33+", "master reports delivered, covering 40+ sub-reports"],
+    ["50%", "faster dashboard load times after DAX optimisation"],
+    ["80%", "less manual effort on utilisation tracking"],
+    ["9", "certifications across Microsoft, AWS and Python"]
+  ],
+  slicer: ["All", "Power BI", "DAX", "Databricks", "Power Automate", "Report design"],
+
+  projects: [
+    {
+      id: "migration",
+      client: "EY, delivering for ZS Associates and Amgen  |  2025 to present",
+      title: "Enterprise reporting migration and BI modernisation",
+      problem: "A global pharmaceutical client needed around 150 legacy SAP BusinessObjects reports rebuilt in Power BI without losing the business logic teams relied on.",
+      built: [
+        "33+ master reports covering 40+ sub-reports, migrated, repointed and validated",
+        "4 reusable semantic models that new reports build on instead of re-creating logic",
+        "Deployment across Dev, QA and Production, plus custom Azure Databricks views and security"
+      ],
+      impact: [["4", "shared semantic models"], ["3", "environments owned end to end"]],
+      tags: ["Power BI", "DAX", "Power Query", "SQL", "Databricks", "SAP BusinessObjects"],
+      filters: ["Power BI", "DAX", "Databricks"],
+      image: null,
+      mock: "migration"
+    },
+    {
+      id: "ado",
+      client: "Hexaware Technologies, delivering for EY  |  2022 to 2025",
+      title: "Azure DevOps utilisation and operational governance",
+      problem: "Leadership had no single view of utilisation, incidents and enhancements across more than 250,000 logged work hours in Azure DevOps.",
+      built: [
+        "Enterprise dashboards over Azure DevOps data with drilldowns and utilisation thresholds",
+        "Reusable DAX measures and optimised analytical views",
+        "Power Automate workflows that produce utilisation reporting automatically"
+      ],
+      impact: [["50%", "faster load times"], ["80%", "less manual tracking"], ["250K+", "work hours covered"]],
+      tags: ["Power BI", "DAX", "Azure DevOps", "Power Automate", "Incremental refresh"],
+      filters: ["Power BI", "DAX", "Power Automate", "Report design"],
+      image: null,
+      mock: "ado"
+    },
+    {
+      id: "compliance",
+      client: "Hexaware Technologies, delivering for EY  |  2022 to 2025",
+      title: "Asset and identity compliance reporting (ACAS/ISR)",
+      problem: "Global compliance and audit teams needed reliable reporting on assets and identities across very large datasets.",
+      built: [
+        "Databricks pipelines feeding star-schema semantic models",
+        "Incremental refresh and row-level security for large, sensitive data",
+        "Automated validation and migration across Dev, QA and Production"
+      ],
+      impact: [["RLS", "secured by role"], ["Audit", "ready reporting"]],
+      tags: ["Databricks", "Power BI", "Star schema", "RLS", "Incremental refresh"],
+      filters: ["Power BI", "DAX", "Databricks"],
+      image: null,
+      mock: "compliance"
+    },
+    {
+      id: "consolidation",
+      client: "Pharma commercial analytics  |  Client name withheld",
+      title: "Six legacy dashboards consolidated into one report",
+      problem: "A brand team was working across six separate legacy dashboards with overlapping metrics and inconsistent design.",
+      built: [
+        "A single six-page report with one navigation and one design system",
+        "Wireframes for every page, reconciled line by line against the source KPI workbook",
+        "Native Power BI interactions only: bookmarks, drill-through, tooltips and slicers"
+      ],
+      impact: [["6 to 1", "dashboards consolidated"], ["100%", "native Power BI features"]],
+      tags: ["Power BI", "Report design", "Wireframing", "Design systems"],
+      filters: ["Power BI", "Report design"],
+      image: null,
+      mock: "consolidation"
+    }
+  ],
+
+  timeline: [
+    { when: "2025 to present", what: "Senior Data Analyst, Power BI Consultant", where: "Ernst & Young (EY), for ZS Associates and Amgen. Pune", now: true },
+    { when: "2022 to 2025", what: "Power BI Developer", where: "Hexaware Technologies, for EY. Chennai and Pune" },
+    { when: "2018 to 2022", what: "Bachelor of Engineering, Computer Science", where: "Savitribai Phule Pune University. CGPA 8.86" }
+  ],
+
+  certs: [
+    ["PL-300", "Microsoft Power BI Data Analyst"],
+    ["DP-900", "Microsoft Azure Data Fundamentals"],
+    ["AZ-900", "Microsoft Azure Fundamentals"],
+    ["AI-900", "Microsoft Azure AI Fundamentals"],
+    ["CLF-C01", "AWS Certified Cloud Practitioner"],
+    ["AIF-C01", "AWS Certified AI Practitioner"],
+    ["PCEP", "Certified Entry-Level Python Programmer"],
+    ["GitHub Copilot", "GitHub certification"],
+    ["Scrum", "Scrum Fundamentals"]
+  ],
+
+  skills: [
+    ["BI and modelling", ["Power BI Desktop and Service", "DAX", "Power Query", "Semantic models", "Star schema", "Incremental refresh", "Row-level security", "Performance tuning"]],
+    ["Data and engineering", ["SQL", "Azure Databricks", "Snowflake", "ETL pipelines", "Python"]],
+    ["Platforms and automation", ["Power Automate", "Power Apps", "Azure DevOps", "ServiceNow", "SAP BusinessObjects"]],
+    ["AI in analytics", ["Microsoft Copilot", "ChatGPT", "Q&A visual", "Key Influencers", "Smart Narratives"]],
+    ["Working with people", ["Stakeholder management", "Requirement gathering", "Cross-functional delivery", "Mentoring teammates"]]
+  ],
+
+  /* ---------------- PERSONAL ---------------- */
+  personal: {
+    title: "The person behind the reports",
+    lede: "Engineer by degree, analyst by trade, designer by habit. I care about the last pixel as much as the first measure, and I’d rather set the rules early than fix the mess later.",
+    facts: [
+      ["Based in", "Pune, India"],
+      ["Studied", "Computer Science"],
+      ["Works in", "Data, dashboards and design"],
+      ["Languages", ""],
+      ["Off the clock", ""]
+    ],
+    principles: [
+      ["Feasible first", "I agree the rules up front. If the platform can’t do it natively, it doesn’t go in the design."],
+      ["Reconcile everything", "Every number on a screen gets checked against its source, line by line, before anyone sees it."],
+      ["Keep what works", "Improving a design means fixing alignment, spacing and consistency, not throwing away an identity people know."],
+      ["No filler", "If a visual doesn’t answer a question someone actually asks, it comes off the page."]
+    ],
+    favourites: [
+      ["Books", []],
+      ["Films and shows", []],
+      ["Music", []],
+      ["Food", []],
+      ["Places", []],
+      ["Hobbies", []]
+    ],
+    funfacts: []
+  }
+};
+
+/* =====================================================================
+   SAMPLE-DATA MOCKUPS. All values and names are invented.
+   ===================================================================== */
+const MOCKS = {
+  migration: {
+    title: "Report migration tracker",
+    filters: ["Wave: All", "Environment: Production", "Business area: All"],
+    kpis: [["150", "Reports in scope"], ["96", "Delivered"], ["4", "Semantic models"]],
+    left: { title: "Reports by wave and status", chart: { type: "stack", cats: ["W1","W2","W3","W4","W5","W6"],
+      series: [{ name: "Delivered", cls: "s1", v: [22,20,18,16,12,8] }, { name: "In QA", cls: "s2", v: [0,2,4,6,7,6] }, { name: "Not started", cls: "s4", v: [0,0,1,3,6,12] }] } },
+    right: { title: "Master report status", table: { cols: ["Report family", "Subs", "Status"],
+      rows: [["Sales operations", "8", "ok"], ["Inventory snapshot", "6", "ok"], ["Finance summary", "5", "wip"], ["Field activity", "7", "wip"], ["Supply planning", "4", "todo"]] } }
+  },
+  ado: {
+    title: "Delivery utilisation overview",
+    filters: ["Year: 2024", "Team: All", "Work type: All"],
+    kpis: [["21.4K", "Hours logged"], ["87%", "Utilisation"], ["38", "Open incidents"]],
+    left: { title: "Utilisation vs 85% target", chart: { type: "line", cats: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"], v: [78,82,80,86,89,84,88,91], th: 85, min: 70, max: 95 } },
+    right: { title: "Utilisation by team (%)", heat: { cols: ["Q1","Q2","Q3"],
+      rows: [["Team Alpha",[82,88,91]],["Team Beta",[74,79,86]],["Team Gamma",[90,93,89]],["Team Delta",[68,77,83]]] } }
+  },
+  compliance: {
+    title: "Asset and identity compliance",
+    filters: ["Region: All", "Asset class: All", "As of: Week 42"],
+    kpis: [["12,480", "Assets tracked"], ["94.2%", "Compliant"], ["316", "Open findings"]],
+    left: { title: "Open findings by region", chart: { type: "hbar", items: [["North America",112],["Europe",86],["Asia Pacific",71],["Latin America",29],["Middle East",18]] } },
+    right: { title: "Compliance rate", chart: { type: "donut", pct: 94.2 } }
+  },
+  consolidation: {
+    title: "Brand performance",
+    nav: ["Overview", "Promotion", "Network", "Opportunity", "Accounts", "Contracts"],
+    kpis: [["48.2K", "Volume (units)"], ["+6.1%", "vs prior quarter"], ["1,204", "Active accounts"]],
+    left: { title: "Volume trend by quarter", chart: { type: "bar", cats: ["Q1 25","Q2 25","Q3 25","Q4 25","Q1 26","Q2 26"], v: [36,39,41,44,45,48] } },
+    right: { title: "Accounts by segment", chart: { type: "hbar", items: [["Core",412],["Contested",356],["Emerging",281],["Unsegmented",155]] } }
+  }
+};
+
+/* ---------------- tiny SVG chart helpers ---------------- */
+function svgStack(c){
+  const W=260,H=120,pb=16,pt=4,n=c.cats.length,bw=W/n*0.6,gap=W/n;
+  const tot=c.cats.map((_,i)=>c.series.reduce((s,x)=>s+x.v[i],0)), max=Math.max(...tot);
+  let g=`<line class="grid-ln" x1="0" y1="${H-pb}" x2="${W}" y2="${H-pb}"/>`;
+  c.cats.forEach((cat,i)=>{let y=H-pb;const x=i*gap+(gap-bw)/2;
+    c.series.forEach(s=>{const h=s.v[i]/max*(H-pb-pt);if(h>0){y-=h;g+=`<rect class="${s.cls}" x="${x}" y="${y}" width="${bw}" height="${h}"/>`}});
+    g+=`<text x="${x+bw/2}" y="${H-3}" text-anchor="middle">${cat}</text>`});
+  const lg=c.series.map(s=>`<span><i class="${s.cls}" style="background:var(--d${s.cls[1]})"></i>${s.name}</span>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Stacked column chart, sample data">${g}</svg><div class="legend">${lg}</div>`;
+}
+function svgBar(c){
+  const W=260,H=120,pb=16,pt=12,n=c.cats.length,gap=W/n,bw=gap*0.58,max=Math.max(...c.v);
+  let g=`<line class="grid-ln" x1="0" y1="${H-pb}" x2="${W}" y2="${H-pb}"/>`;
+  c.v.forEach((v,i)=>{const h=v/max*(H-pb-pt),x=i*gap+(gap-bw)/2,y=H-pb-h;
+    g+=`<rect class="${i===n-1?'s1':'s4'}" x="${x}" y="${y}" width="${bw}" height="${h}"/><text x="${x+bw/2}" y="${y-3}" text-anchor="middle" class="${i===n-1?'lbl-strong':''}">${v}K</text><text x="${x+bw/2}" y="${H-3}" text-anchor="middle">${c.cats[i]}</text>`});
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Column chart, sample data">${g}</svg>`;
+}
+function svgLine(c){
+  const W=260,H=120,pb=16,pt=8,pl=20,n=c.v.length,sx=(W-pl)/(n-1),sy=v=>pt+(c.max-v)/(c.max-c.min)*(H-pb-pt);
+  let g="";[75,85,95].forEach(t=>{if(t!==c.th)g+=`<line class="grid-ln" x1="${pl}" y1="${sy(t)}" x2="${W}" y2="${sy(t)}"/><text x="0" y="${sy(t)+3}">${t}</text>`});
+  g+=`<line class="ln-th" x1="${pl}" y1="${sy(c.th)}" x2="${W}" y2="${sy(c.th)}"/><text x="0" y="${sy(c.th)+3}" style="fill:var(--d5)">${c.th}</text>`;
+  const pts=c.v.map((v,i)=>`${pl+i*sx},${sy(v)}`).join(" ");
+  g+=`<polyline class="ln1" points="${pts}"/>`;
+  c.v.forEach((v,i)=>{g+=`<circle cx="${pl+i*sx}" cy="${sy(v)}" r="2.6" class="${v<c.th?'s5':'s1'}"/><text x="${pl+i*sx}" y="${H-3}" text-anchor="middle">${c.cats[i]}</text>`});
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Line chart against target, sample data">${g}</svg><div class="legend"><span><i style="background:var(--d1)"></i>Utilisation</span><span><i style="background:var(--d5)"></i>Target or below</span></div>`;
+}
+function svgHbar(c){
+  const W=260,rh=20,H=c.items.length*rh,lw=78,max=Math.max(...c.items.map(x=>x[1]));
+  let g="";c.items.forEach(([l,v],i)=>{const w=v/max*(W-lw-30),y=i*rh;
+    g+=`<text x="0" y="${y+13}">${l}</text><rect class="${i===0?'s1':'s2'}" x="${lw}" y="${y+4}" width="${w}" height="12"/><text x="${lw+w+4}" y="${y+13}" class="lbl-strong">${v}</text>`});
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Bar chart, sample data">${g}</svg>`;
+}
+function svgDonut(c){
+  const r=42,cx=60,cy=56,C=2*Math.PI*r,on=C*c.pct/100;
+  return `<svg viewBox="0 0 120 112" role="img" aria-label="Donut chart ${c.pct}% compliant, sample data" style="max-width:150px;margin:0 auto">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" style="stroke:var(--d4)" stroke-width="14"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" style="stroke:var(--d2)" stroke-width="14" stroke-dasharray="${on} ${C-on}" transform="rotate(-90 ${cx} ${cy})"/>
+    <text x="${cx}" y="${cy+2}" text-anchor="middle" class="lbl-strong" style="font-size:15px">${c.pct}%</text>
+    <text x="${cx}" y="${cy+15}" text-anchor="middle">compliant</text></svg>`;
+}
+function chart(c){return ({stack:svgStack,bar:svgBar,line:svgLine,hbar:svgHbar,donut:svgDonut})[c.type](c)}
+function tableHTML(t){
+  const lab={ok:"Live",wip:"In QA",todo:"Queued"};
+  return `<table class="mtable"><thead><tr>${t.cols.map((c,i)=>`<th${i===1?' style="text-align:right"':''}>${c}</th>`).join("")}</tr></thead><tbody>${
+    t.rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td><span class="pill ${r[2]}">${lab[r[2]]}</span></td></tr>`).join("")}</tbody></table>`;
+}
+function heatHTML(h){
+  const cls=v=>v>=90?"h4c":v>=85?"h3c":v>=78?"h2c":"h1c";
+  return `<table class="mtable"><thead><tr><th>Team</th>${h.cols.map(c=>`<th style="text-align:right">${c}</th>`).join("")}</tr></thead><tbody>${
+    h.rows.map(([n,vs])=>`<tr><td>${n}</td>${vs.map(v=>`<td class="n ${cls(v)}">${v}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+function cell(x){return `<div class="mock-cell"><h5>${x.title}</h5>${x.chart?chart(x.chart):x.table?tableHTML(x.table):heatHTML(x.heat)}</div>`}
+function mockHTML(key){
+  const m=MOCKS[key];
+  return `<div class="mock" role="img" aria-label="Recreated report: ${m.title}, sample data">
+    <div class="mock-top"><span class="mock-title">${m.title}</span><span class="mock-tag">Sample data</span></div>
+    ${m.nav?`<div class="mock-nav">${m.nav.map((p,i)=>`<span class="${i===0?'on':''}">${p}</span>`).join("")}</div>`:""}
+    ${m.filters?`<div class="mock-filters">${m.filters.map(f=>`<span>${f}</span>`).join("")}</div>`:""}
+    <div class="mock-kpis">${m.kpis.map(([v,l])=>`<div class="mock-kpi"><b class="num">${v}</b><small>${l}</small></div>`).join("")}</div>
+    <div class="mock-row">${cell(m.left)}${cell(m.right)}</div></div>`;
+}
+
+/* ---------------- render ---------------- */
+const $=s=>document.querySelector(s);
+const ICON={
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  cap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>',
+  badge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg>'
+};
+const mail=`mailto:${DATA.contact.email}`;
+["#tb-email","#hero-email"].forEach(s=>$(s).href=mail);
+$("#tb-linkedin").href=DATA.contact.linkedin;
+$("#refreshed").textContent=DATA.refreshed;
+$("#role").textContent=DATA.role;
+$("#lede").textContent=DATA.lede;
+$("#facts").innerHTML=DATA.facts.map(([i,t])=>`<li>${ICON[i]}${t}</li>`).join("");
+$("#kpis").innerHTML=DATA.kpis.map(([v,l])=>`<div class="kpi"><div class="kpi-v num">${v}</div><div class="kpi-l">${l}</div></div>`).join("");
+
+$("#projects").innerHTML=DATA.projects.map(p=>`
+  <article class="project" data-filters="${p.filters.join("|")}">
+    <div class="p-visual">${p.image?`<img src="${p.image}" alt="${p.title} report, with sample data" loading="lazy">`:mockHTML(p.mock)}</div>
+    <div class="p-body">
+      <p class="p-client">${p.client}</p>
+      <h3>${p.title}</h3>
+      <dl>
+        <div><dt>The problem</dt><dd>${p.problem}</dd></div>
+        <div><dt>What I built</dt><dd><ul>${p.built.map(b=>`<li>${b}</li>`).join("")}</ul></dd></div>
+      </dl>
+      <div class="impact">${p.impact.map(([b,t])=>`<span><b>${b}</b> ${t}</span>`).join("")}</div>
+      <div class="chips">${p.tags.map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+    </div>
+  </article>`).join("");
+
+const slicer=$("#slicer");
+slicer.innerHTML=DATA.slicer.map((s,i)=>`<button type="button" aria-pressed="${i===0}" data-v="${s}">${s}</button>`).join("");
+function applySlicer(v){
+  let shown=0;
+  document.querySelectorAll(".project").forEach(el=>{const ok=v==="All"||el.dataset.filters.split("|").includes(v);el.hidden=!ok;if(ok)shown++});
+  slicer.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v));
+  $("#slicer-count").textContent=`${shown} of ${DATA.projects.length} projects`;
+}
+slicer.addEventListener("click",e=>{const b=e.target.closest("button");if(b)applySlicer(b.dataset.v)});
+applySlicer("All");
+
+$("#timeline").innerHTML=DATA.timeline.map(t=>`<li class="${t.now?'now':''}"><div class="t-when">${t.when}</div><div class="t-what">${t.what}</div><div class="t-where">${t.where}</div></li>`).join("");
+$("#cert-sub").textContent=`${DATA.certs.length} active credentials`;
+$("#certs").innerHTML=DATA.certs.map(([c,n])=>`<li><b>${c}</b><span>${n}</span></li>`).join("");
+$("#skills").innerHTML=DATA.skills.map(([g,items])=>`<div><h4>${g}</h4><div class="chips">${items.map(i=>`<span class="chip">${i}</span>`).join("")}</div></div>`).join("");
+
+/* personal */
+const P=DATA.personal;
+const empty=(label)=>`<div class="empty"><b>${label}</b>Coming soon.</div>`;
+$("#p-title").textContent=P.title;
+$("#p-lede").textContent=P.lede;
+$("#about-facts").innerHTML=P.facts.map(([k,v])=>`<div><dt>${k}</dt><dd>${v||'<span style="color:var(--ink-3);font-weight:400">Coming soon</span>'}</dd></div>`).join("");
+$("#principles").innerHTML=P.principles.map(([h,t])=>`<div class="visual principle"><h4>${h}</h4><p>${t}</p></div>`).join("");
+$("#favs").innerHTML=P.favourites.map(([h,items])=>items.length?`<div class="visual fav"><h3 class="v-title">${h}</h3><ul>${items.map(i=>`<li>${i}</li>`).join("")}</ul></div>`:empty(h)).join("");
+$("#funfacts").innerHTML=P.funfacts.length?P.funfacts.map(f=>`<div class="visual fav"><p style="margin:0">${f}</p></div>`).join(""):empty("Fun facts");
+
+/* ---------------- page routing (#professional / #personal) ---------------- */
+const PAGES=["professional","personal"];
+function show(page,scroll){
+  if(!PAGES.includes(page))page="professional";
+  PAGES.forEach(p=>document.getElementById(p).classList.toggle("is-active",p===page));
+  document.querySelectorAll(".pagetabs a").forEach(a=>{if(a.dataset.page===page)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  $("#page-count").textContent=`Page ${PAGES.indexOf(page)+1} of ${PAGES.length}`;
+  if(scroll)window.scrollTo(0,0);
+}
+function route(scroll){
+  const h=location.hash.slice(1);
+  if(PAGES.includes(h)){show(h,scroll)}
+  else{show("professional",false);if(h){const t=document.getElementById(h);if(t)t.scrollIntoView()}}
+}
+window.addEventListener("hashchange",()=>route(true));
+route(false);
+document.querySelectorAll("[data-scroll]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.getElementById(a.getAttribute("href").slice(1)).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}));
+</script>
+</body>
+</html>

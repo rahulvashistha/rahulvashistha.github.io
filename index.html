@@ -37,7 +37,7 @@
     <a href="#professional" aria-label="Home"><svg class="mono" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" style="fill:var(--accent)"/><rect x="6" y="16" width="5" height="10" style="fill:var(--mark)"/><rect x="13.5" y="10" width="5" height="16" style="fill:var(--accent-ink)"/><rect x="21" y="6" width="5" height="20" style="fill:var(--accent-ink)"/></svg></a>
     <div>
       <div class="tb-name" id="tb-name"></div>
-      <div class="tb-meta" id="tb-meta"></div>
+      <button type="button" class="tb-meta" id="tb-meta" aria-haspopup="dialog"></button>
     </div>
     <div class="tb-actions">
       <a class="btn" id="tb-resume" download aria-label="Download résumé (PDF)">
@@ -70,6 +70,11 @@
 
 <nav class="pagetabs" aria-label="Report pages"><div class="pagetabs-in" id="tabs"></div></nav>
 <div class="tip" id="tip" role="tooltip" hidden></div>
+<dialog class="refresh" id="refresh-panel" aria-labelledby="rp-title">
+  <div class="rp-top"><b id="rp-title">Refresh history</b><button class="btn" id="rp-close" type="button">Close</button></div>
+  <div class="rp-tabs" id="rp-tabs" role="tablist"><button type="button" role="tab" data-tab="history" aria-selected="true">Refresh history</button><button type="button" role="tab" data-tab="perf" aria-selected="false">Performance analyzer</button></div>
+  <div class="rp-body" id="rp-body"></div>
+</dialog>
 <dialog class="lightbox" id="lightbox" aria-labelledby="lb-title">
   <div class="lb-head"><b id="lb-title"></b><span class="lb-count" id="lb-count"></span><a class="btn" id="lb-link" target="_blank" rel="noopener" hidden>Open PDF</a><button class="btn" id="lb-prev" type="button" aria-label="Previous image" hidden>Previous</button><button class="btn" id="lb-next" type="button" aria-label="Next image" hidden>Next</button><button class="btn" id="lb-close" type="button">Close</button></div>
   <div class="lb-body"><img id="lb-img" alt=""></div>
@@ -82,6 +87,8 @@
 <script src="data/timeline.js"></script>
 <script src="data/yearbook.js"></script>
 <script src="data/personal.js"></script>
+<script src="data/releases.js"></script>
+<script src="data/freebies.js"></script>
 <script src="js/charts.js"></script>
 <script src="js/app.js"></script>
 </body>

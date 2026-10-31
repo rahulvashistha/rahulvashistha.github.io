@@ -48,13 +48,16 @@ Unknown hashes fall back to the Professional page.
 | `data/mocks.js` | The interactive recreated reports used in case studies. | Yes, carefully (it contains small functions) |
 | `data/timeline.js` | Certifications, skill assessments, courses, milestones and photos. Hall of Fame, Yearbook and Album all read this. | Yes, most often |
 | `data/yearbook.js` | Per-year extras: one-line summary, superlative, quote, cover photo. | Yes |
-| `data/personal.js` | Personal page content, including the watch report. | Yes |
+| `data/personal.js` | Personal page content, including the Now strip and the watch report. | Yes |
+| `data/releases.js` | Release notes shown in the Refresh history panel (click "Data as of" in the title bar, or Refresh history in the footer). | Yes, every release |
+| `data/freebies.js` | The "Take something with you" section: theme downloads and KPI card templates (DAX text repeated for the Copy button). | When a freebie changes |
 | `js/charts.js` | Draws charts, recreated reports, model-view diagrams and Story mode sketches. | Only for new chart types |
 | `js/app.js` | Renders every page, routing, themes, tooltips, Story mode, Hall of Fame, Yearbook, Album, image viewer, analytics. | Only for behaviour changes |
 | `css/site.css` | All styles and the four theme palettes. | For visual changes |
 | `assets/certs/` | Certificate images (WebP, about 1400px wide). | Add files |
 | `assets/projects/` | Project screenshots (create the folder when the first one is added). | Add files |
-| `assets/photos/` | Album and Yearbook photos (create the folder when the first one is added). | Add files |
+| `assets/photos/` | Photos: `headshot.webp` (transparent cut-out used for the duotone hero portrait) plus Album, Snapshots and Yearbook photos. | Add files |
+| `assets/downloads/` | Power BI theme files and KPI card `.dax` templates offered on the site. | Replace files |
 | `assets/Rahul_Vashistha_Resume.pdf` | The downloadable résumé. It contains no phone number. | Replace the file |
 | `og-image.png` | 1200 × 630 preview image shown when the link is shared. | Replace the file |
 | `tools/redact.py` | Blurs report screenshots before they go on the site (see section 5). Not used by the website itself. | Only to extend the safe-label list |
@@ -82,6 +85,8 @@ These are JavaScript files, not JSON. Strings can use straight double quotes for
 | `skills` | Toolkit groups: `[group name, [chips]]`. |
 | `skillSlicer` | Buttons on the project filter. Must start with `"All"`. Each value must match a value in some project's `filters`. |
 | `analytics.goatcounter` | GoatCounter site code. Empty string means analytics is off. |
+| `repo` | `owner/repository` on GitHub. The title bar reads the date of the latest commit from it, so "Data as of" is always real. `refreshed` is the fallback text. |
+| `headshot` | Path to the portrait. Use a transparent cut-out (WebP or PNG); the site draws it as a duotone in each theme's colours, so its own colours don't matter. |
 
 Story stages (used in every `frames` and `story` list) and the sketch each one draws:
 
@@ -117,7 +122,8 @@ Each project is one object. Projects appear on the Professional page in this ord
 | `visual` | Either `{ mock: "<key in SITE.mocks>" }` for a recreated report, or `{ caption, flow: [[number, heading, text], ...] }` for a real-numbers flow diagram. In a flow, a number written as `"word:Databricks"` shows a word instead of a number. |
 | `screenshots` | List of `{ src, caption }`, e.g. `{ src: "assets/projects/pyl-2-execution.webp", caption: "Execution: calls trend" }`. They appear as a captioned gallery in a "The real report" section and open in the viewer, which steps through them with Previous and Next. Only blurred images made with `tools/redact.py`. |
 | `story` | Exactly four frames: `problem`, `approach`, `build`, `result`, each `[stage, headline, text]`. |
-| `fixes` | Root-cause stories: `title`, `symptom`, `cause`, `fix`, `proof`. They appear on the case study and in Root-cause files. Can be empty. |
+| `fixes` | Root-cause stories: `title`, `symptom`, `cause`, `fix`, `proof`, and `options` for the guess-the-cause game: `[real cause, wrong answer, wrong answer]`. Keep all three options a similar length so the answer doesn't give itself away. The site shuffles them. Can be empty. |
+| `cover` | Image on the project card (16:9, about 900px wide). |
 | `modelView` | Simplified diagram on a 640 × 300 canvas. `tables`: `id`, `n` (name), `k` (kind: `fact`, `dim`, `bridge`, `snap`, `model`, `report`, `source`), `x`, `y`, optional `mode` (e.g. "DirectQuery"), `note`, `w` (width, default 150). `links`: `[tableId, tableId]` pairs. Tables are 54px tall; keep them inside the canvas and avoid overlaps. Names are generic, never the client's real table names. |
 
 ### 3.3 `data/mocks.js` → `SITE.mocks`
@@ -145,6 +151,8 @@ Report-level options:
 | `style: "band"` | Dark title band with `title` and `subtitle` (used by site operations) |
 | no `style` | Simple title bar with tab-style page buttons |
 | `start` | Index of the first page shown (the commercial platform starts on its hidden Welcome page) |
+| `skin: "amber"` | Gives the report its own dark-and-amber look, as in the real DevOps and ServiceNow reports, whatever the site theme |
+| `navBottom: true` | Page tabs along the bottom, like Power BI, plus a home button on every page except the first |
 
 KPI objects:
 
@@ -175,6 +183,11 @@ Every cell has a `title`. Optional on any cell: `zone: 1–4` (coloured top bord
 | Empty state | `{ empty: "Message explaining why this view doesn’t apply." }` |
 | Selectable list | `{ radio: { id, opts: [...] } }` (behaves like a toggle; `build` reads `s.t[id]`) |
 | Welcome page | `{ welcome: { geo, go: pageIndex, note } }` (Go opens that page) |
+| Navigation tiles | `{ tiles: [[label, pageIndex], ...] }` |
+| Gauges | `{ gauges: [[title, percent or null], ...] }` (null shows "(Blank)"; 95% and over is red, over 100% dark red; 80% is marked) |
+| Pie or donut | `{ chart: { type: "pie", donut?: true, items: [[label, value, cls]] } }` |
+| Paired bars | `{ chart: { type: "hpair", items: [[label, completed, estimated?]] } }` |
+| Grouped columns | `{ chart: { type: "group", cats, series: [{ name, cls, v }] } }` |
 | Nested layout | `{ bare: true, group: [rows...] }` (a column holding its own rows, for two-column report layouts) |
 
 Charts size themselves to their slot: a row with one column draws a wide chart, two columns a medium one, three or more a compact one.
@@ -214,6 +227,7 @@ Keyed by year: `2026: { line, superlative, quote, cover }`. The current superlat
 | `favourites` | `[heading, [items]]`. The section stays hidden while empty. |
 | `values` | Four cards: `[heading, text]`. |
 | `funfacts` | List of sentences. An even number looks best (two columns). |
+| `now` | `{ updated: "YYYY-MM-DD", items: [[label, value], ...] }`. Shown as the Now strip. Empty values are hidden; the strip says how long ago `updated` was. |
 
 ---
 
@@ -248,7 +262,7 @@ Same as above with `tier: "course"` (plus `category`) or `tier: "assessment"`. C
 3. The Album tab appears with the first photo. To use it as a Yearbook cover, set that year's `cover` in `data/yearbook.js`.
 
 **Add project screenshots**
-Raw report screenshots must never be published or committed. Every one goes through `tools/redact.py` first:
+Screenshots may only show dummy data: every client name, brand, person, contact and value replaced. If you can't produce a dummy-data version, blur it with `tools/redact.py`. Raw client screenshots must never be published or committed. To blur:
 1. Run `redact()` on the raw image. It blurs everything, then restores only words on its SAFE list (page names, filter names, chart titles, column headers). Pass `covers` for logos and brand graphics, as flat boxes in the background colour.
 2. Run `leak_test()` on the output. It should return nothing, or only gibberish from blurred bars. Any real word or number means the image isn't safe.
 3. Open the image and check by eye, especially large KPI numbers, which survive blur longest. Raise `blur` if anything is guessable.
@@ -257,11 +271,23 @@ Raw report screenshots must never be published or committed. Every one goes thro
 **Add a project**
 Copy a whole project object in `data/projects.js`, give it a new `id`, and fill every field. For a recreated report, add a matching entry to `data/mocks.js` and point `visual.mock` at its key; otherwise use a `flow`. Add any new skill to `skillSlicer` in `data/profile.js` if it should be filterable.
 
+**Publish a release note**
+Add a block at the top of `data/releases.js`: `{ date: "YYYY-MM-DD", title: "Month YYYY update", items: ["...", "..."] }`. The newest block shows as Current.
+
+**Update the Now strip**
+Edit `now.items` and `now.updated` in `data/personal.js`.
+
+**Replace the portrait**
+Cut the person out of the background (a transparent PNG or WebP, head and shoulders, about 900px wide) and save it as `assets/photos/headshot.webp`.
+
 **Add a Yearbook year's extras**
 Add a key to `data/yearbook.js`, for example `2027: { line: "...", superlative: "...", quote: "", cover: null }`.
 
 **Change a theme or add one**
 Theme colours are token blocks at the top of `css/site.css` (`:root[data-theme="…"]`). To add a theme: copy a block with a new name, then add it to `THEMES` (name, description, light or dark, four swatch colours) and `PAIR` (its light or dark partner) near the top of `js/app.js`.
+
+**Motion**
+Reports render in once per visit (KPI numbers count up, panels fade in), and chart bars grow when they first scroll into view. Everything is skipped when the visitor's device asks for reduced motion. New chart bars need the class `bv` (vertical) or `bh` (horizontal) to take part.
 
 **Turn on visitor analytics**
 Create a free account at goatcounter.com, choose a site code, and put that code in `analytics.goatcounter` in `data/profile.js`. Page views (including each tab and case study) and résumé downloads are then counted. Analytics never runs when the site is opened as a local file.

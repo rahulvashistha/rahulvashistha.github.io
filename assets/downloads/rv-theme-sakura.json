@@ -1,0 +1,86 @@
+{
+  "name": "Rahul Vashistha - Sakura night",
+  "dataColors": [
+    "#F28DB2",
+    "#8CC8E6",
+    "#FFD27A",
+    "#B9A2F2",
+    "#FF7F6E",
+    "#4A3C53",
+    "#7FD6A4",
+    "#8F7F8C"
+  ],
+  "background": "#201925",
+  "foreground": "#F4EAF1",
+  "tableAccent": "#F28DB2",
+  "good": "#7FD6A4",
+  "neutral": "#FFD27A",
+  "bad": "#FF7F6E",
+  "maximum": "#F28DB2",
+  "center": "#5B3550",
+  "minimum": "#2A2031",
+  "textClasses": {
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#F4EAF1"
+    },
+    "title": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#F4EAF1"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#CBB8C7"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#CBB8C7"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#201925"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#3C2F44"
+              }
+            },
+            "radius": 0
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#16111A"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

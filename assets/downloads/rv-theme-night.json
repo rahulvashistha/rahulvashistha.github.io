@@ -1,0 +1,86 @@
+{
+  "name": "Rahul Vashistha - Night shift",
+  "dataColors": [
+    "#4BA3D1",
+    "#4FC1BB",
+    "#E8B248",
+    "#9C8AD6",
+    "#E07A62",
+    "#3F4E5E",
+    "#5BC08A",
+    "#7E8B99"
+  ],
+  "background": "#18202A",
+  "foreground": "#E7ECF1",
+  "tableAccent": "#4BA3D1",
+  "good": "#5BC08A",
+  "neutral": "#E8B248",
+  "bad": "#E07A62",
+  "maximum": "#4BA3D1",
+  "center": "#2A5A75",
+  "minimum": "#1F2E3B",
+  "textClasses": {
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#E7ECF1"
+    },
+    "title": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#E7ECF1"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#AEB9C5"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#AEB9C5"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#18202A"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#2C3946"
+              }
+            },
+            "radius": 0
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#10151B"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

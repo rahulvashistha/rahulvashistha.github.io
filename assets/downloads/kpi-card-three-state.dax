@@ -1,0 +1,63 @@
+KPI card (three-state) =
+-- Rahul Vashistha | rahulvashistha.github.io
+-- Returns an SVG image. Set this measure's Data category to "Image URL", then show it in a
+-- Card (new), Table or Matrix. Replace [Value], [Prior Value], the 'Date' columns and the title.
+-- Growth uses three states so "no change" never looks like "no data".
+VAR _Title  = "Shipped volume"
+VAR _Value  = [Value]
+VAR _Prior  = [Prior Value]
+VAR _Change = DIVIDE ( _Value - _Prior, _Prior )
+VAR _State =
+    SWITCH (
+        TRUE (),
+        ISBLANK ( _Change ), "flat",
+        _Change > 0.0005, "up",
+        _Change < -0.0005, "down",
+        "flat"
+    )
+VAR _Colour = SWITCH ( _State, "up", "#2E8B57", "down", "#C9573E", "#8A96A3" )
+VAR _Marker =
+    SWITCH (
+        _State,
+        "up",   "<polygon points='18,109 24,101 30,109' fill='" & _Colour & "'/>",
+        "down", "<polygon points='18,101 24,109 30,101' fill='" & _Colour & "'/>",
+                "<rect x='19' y='102' width='10' height='6' fill='" & _Colour & "'/>"
+    )
+VAR _ChangeText =
+    IF ( ISBLANK ( _Change ), "No prior value", FORMAT ( _Change, "+0.0%;-0.0%;0.0%" ) & " vs prior" )
+-- Sparkline: the 12 months up to the latest month in the current selection
+VAR _End = MAX ( 'Date'[Month Start] )
+VAR _Months =
+    TOPN ( 12, FILTER ( ALL ( 'Date'[Month Start] ), 'Date'[Month Start] <= _End ), 'Date'[Month Start], DESC )
+VAR _Points =
+    ADDCOLUMNS (
+        _Months,
+        "@v",
+            VAR _m = 'Date'[Month Start]
+            RETURN CALCULATE ( [Value], REMOVEFILTERS ( 'Date' ), 'Date'[Month Start] = _m )
+    )
+VAR _Min   = MINX ( _Points, [@v] )
+VAR _Max   = MAXX ( _Points, [@v] )
+VAR _First = MINX ( _Points, 'Date'[Month Start] )
+VAR _Span  = INT ( MAXX ( _Points, 'Date'[Month Start] ) - _First )
+VAR _Line =
+    CONCATENATEX (
+        _Points,
+        VAR _x = 175 + 110 * DIVIDE ( INT ( 'Date'[Month Start] - _First ), _Span, 0 )
+        VAR _y = 105 - 55 * DIVIDE ( [@v] - _Min, _Max - _Min, 0.5 )
+        RETURN FORMAT ( _x, "0" ) & "," & FORMAT ( _y, "0" ),
+        " ",
+        'Date'[Month Start], ASC
+    )
+VAR _Svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' width='300' height='140' viewBox='0 0 300 140'>"
+        & "<rect x='0.5' y='0.5' width='299' height='139' fill='#FFFFFF' stroke='#D3DAE2'/>"
+        & "<rect x='0' y='0' width='4' height='140' fill='#13618A'/>"
+        & "<text x='18' y='30' font-family='Segoe UI' font-size='13' fill='#4A5868'>" & _Title & "</text>"
+        & "<text x='18' y='78' font-family='Segoe UI' font-size='34' font-weight='700' fill='#16212C'>" & FORMAT ( _Value, "#,0" ) & "</text>"
+        & _Marker
+        & "<text x='36' y='110' font-family='Segoe UI' font-size='13' font-weight='600' fill='" & _Colour & "'>" & _ChangeText & "</text>"
+        & "<polyline points='" & _Line & "' fill='none' stroke='#13618A' stroke-width='2' stroke-linejoin='round'/>"
+        & "</svg>"
+RETURN
+    "data:image/svg+xml;utf8," & SUBSTITUTE ( _Svg, "#", "%23" )

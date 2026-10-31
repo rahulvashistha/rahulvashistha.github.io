@@ -1,0 +1,86 @@
+{
+  "name": "Rahul Vashistha - Court",
+  "dataColors": [
+    "#1E7A4C",
+    "#3895AE",
+    "#E0A526",
+    "#6A5AA6",
+    "#C4523B",
+    "#BCD1C3",
+    "#8A9A90",
+    "#10241A"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#10241A",
+  "tableAccent": "#1E7A4C",
+  "good": "#1E7A4C",
+  "neutral": "#E0A526",
+  "bad": "#C4523B",
+  "maximum": "#1E7A4C",
+  "center": "#9DCDB0",
+  "minimum": "#E2F0E6",
+  "textClasses": {
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#10241A"
+    },
+    "title": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#10241A"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#3D5A4A"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#3D5A4A"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#C9DCD0"
+              }
+            },
+            "radius": 0
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#E4EEE7"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

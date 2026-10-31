@@ -1,0 +1,32 @@
+KPI card (actual vs goal) =
+-- Rahul Vashistha | rahulvashistha.github.io
+-- Returns an SVG image. Set this measure's Data category to "Image URL", then show it in a
+-- Card (new), Table or Matrix. Replace [Actual], [Goal] and the title with your own.
+-- Colour bands: on or above goal, within 10% of goal, below that.
+VAR _Title  = "Quarter to date"
+VAR _Actual = [Actual]
+VAR _Goal   = [Goal]
+VAR _Perf   = DIVIDE ( _Actual, _Goal )
+VAR _Scale  = MAX ( _Actual, _Goal ) * 1.1
+VAR _Track  = 264
+VAR _BarW   = INT ( _Track * DIVIDE ( _Actual, _Scale, 0 ) )
+VAR _GoalX  = 18 + INT ( _Track * DIVIDE ( _Goal, _Scale, 0 ) )
+VAR _Colour =
+    SWITCH ( TRUE (), ISBLANK ( _Perf ), "#8A96A3", _Perf >= 1, "#2E8B57", _Perf >= 0.9, "#E3A72F", "#C9573E" )
+VAR _Status =
+    SWITCH ( TRUE (), ISBLANK ( _Perf ), "No goal set", _Perf >= 1, "On or above goal", _Perf >= 0.9, "Close to goal", "Below goal" )
+VAR _Svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' width='300' height='140' viewBox='0 0 300 140'>"
+        & "<rect x='0.5' y='0.5' width='299' height='139' fill='#FFFFFF' stroke='#D3DAE2'/>"
+        & "<rect x='0' y='0' width='4' height='140' fill='#13618A'/>"
+        & "<text x='18' y='30' font-family='Segoe UI' font-size='13' fill='#4A5868'>" & _Title & "</text>"
+        & "<text x='18' y='72' font-family='Segoe UI' font-size='30' font-weight='700' fill='#16212C'>" & FORMAT ( _Actual, "#,0" ) & "</text>"
+        & "<text x='282' y='72' text-anchor='end' font-family='Segoe UI' font-size='22' font-weight='700' fill='" & _Colour & "'>" & FORMAT ( _Perf, "0.0%" ) & "</text>"
+        & "<rect x='18' y='88' width='" & _Track & "' height='12' fill='#E4E9EE'/>"
+        & "<rect x='18' y='88' width='" & _BarW & "' height='12' fill='" & _Colour & "'/>"
+        & "<rect x='" & ( _GoalX - 1 ) & "' y='82' width='3' height='24' fill='#16212C'/>"
+        & "<text x='18' y='126' font-family='Segoe UI' font-size='12' fill='#4A5868'>Goal " & FORMAT ( _Goal, "#,0" ) & "</text>"
+        & "<text x='282' y='126' text-anchor='end' font-family='Segoe UI' font-size='12' font-weight='600' fill='" & _Colour & "'>" & _Status & "</text>"
+        & "</svg>"
+RETURN
+    "data:image/svg+xml;utf8," & SUBSTITUTE ( _Svg, "#", "%23" )

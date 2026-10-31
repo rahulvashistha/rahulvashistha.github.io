@@ -1,0 +1,86 @@
+{
+  "name": "Rahul Vashistha - Classic",
+  "dataColors": [
+    "#13618A",
+    "#3FA7A3",
+    "#E3A72F",
+    "#6E5BA8",
+    "#C9573E",
+    "#B9C5D2",
+    "#2E8B57",
+    "#8A96A3"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#16212C",
+  "tableAccent": "#13618A",
+  "good": "#2E8B57",
+  "neutral": "#E3A72F",
+  "bad": "#C9573E",
+  "maximum": "#13618A",
+  "center": "#9CC4DA",
+  "minimum": "#E3EEF4",
+  "textClasses": {
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#16212C"
+    },
+    "title": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#16212C"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#4A5868"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#4A5868"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#D3DAE2"
+              }
+            },
+            "radius": 0
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#E9EDF1"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}
